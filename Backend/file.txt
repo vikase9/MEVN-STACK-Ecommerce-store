@@ -1,0 +1,8 @@
+App
+mongodb+srv://helloe9ine:e9ineFirstApp7778@cluster0.z1s41.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+
+compass
+mongodb+srv://helloe9ine:e9ineFirstApp7778@cluster0.z1s41.mongodb.net/test
+
+
