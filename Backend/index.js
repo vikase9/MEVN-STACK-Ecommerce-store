@@ -31,6 +31,7 @@ dotenv.config();
 
 // Routes
 app.use("/user", require("./routes/users"));
+app.use("/product", require("./routes/product"));
 
 // app listen
 const PORT = process.env.PORT || "5000";

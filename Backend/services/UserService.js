@@ -78,7 +78,7 @@ const _validateEmail = (email) => {
 const _validatePassword = (password) => {
     return password.length >= 6;
 };
-
+ 
 // Login a User
 const loginUser = ({ email, password }) => {
     return new Promise(async (resolve, reject) => {
