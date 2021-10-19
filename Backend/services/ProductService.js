@@ -1,6 +1,6 @@
 const productDB = require("../models/ProductDB");
 
-// Update a User
+// addProduct
 const addProduct = (name, price, image, description, category, path) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -28,6 +28,54 @@ const addProduct = (name, price, image, description, category, path) => {
     });
 };
 
+// getAllProducts also getProducts By category
+const getProducts = ({ search }) => {
+    const keyword = search
+        ? {
+              category: {
+                  $regex: search,
+                  $options: "i",
+              },
+          }
+        : {};
+    return new Promise(async (resolve, reject) => {
+        try {
+            const products = await productDB.find({ ...keyword });
+            resolve(products);
+        } catch (error) {
+            reject({
+                code: 500,
+                message: error,
+            });
+        }
+    });
+};
+
+// delete Product
+const deleteProduct = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const product = await productDB.findById(id);
+            if (!product) {
+                return reject({
+                    code: 404,
+                    message: "product not found...",
+                });
+            }
+            const response = productDB.findByIdAndRemove(id);
+
+            resolve(response);
+        } catch (error) {
+            return reject({
+                code: 500,
+                message: error,
+            });
+        }
+    });
+};
+
 module.exports = {
     addProduct,
+    getProducts,
+    deleteProduct,
 };

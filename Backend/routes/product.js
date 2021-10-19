@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { addProduct } = require("../services/ProductService");
-const auth = require("../middleware/auth");
+const {
+    addProduct,
+    getProducts,
+    deleteProduct,
+} = require("../services/ProductService");
 const multer = require("multer");
-const path = require("path");
+const verifyToken = require("../middleware/protectMiddleware");
 
 // multer file upload
 const storage = multer.diskStorage({
@@ -17,8 +20,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// add a new Product  --- POST method
-router.post("/addProduct", upload.single("images"), async (req, res) => {
+// add a new Products  --- POST method
+router.post("/addProduct", upload.single("image"), async (req, res) => {
     const { name, price, image, description, category } = req.body;
     const { path } = req.file;
     try {
@@ -30,6 +33,29 @@ router.post("/addProduct", upload.single("images"), async (req, res) => {
             category,
             path
         );
+        return res.status(200).json(response);
+    } catch (err) {
+        return res.status(err.code).json(err.message);
+    }
+});
+
+// getAllProducts also getProducts By category
+router.get("/getProducts", verifyToken, async (req, res) => {
+    try {
+        const response = await getProducts(req.query);
+        return res.status(200).json(response);
+    } catch (err) {
+        return res.status(err.code).json(err.message);
+    }
+});
+
+// review Products
+
+
+// delete a product
+router.delete("/:id", async (req, res) => {
+    try {
+        const response = await deleteProduct(req.params.id);
         return res.status(200).json(response);
     } catch (err) {
         return res.status(err.code).json(err.message);

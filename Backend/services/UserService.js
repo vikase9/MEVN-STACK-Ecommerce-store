@@ -23,7 +23,7 @@ const registerUser = ({ name, email, password }) => {
             if (!_validatePassword(password)) {
                 return reject({
                     code: 400,
-                    message: "Password too short...",
+                    message: "Password should be atleast 6 characters long...",
                 });
             }
 
@@ -78,7 +78,7 @@ const _validateEmail = (email) => {
 const _validatePassword = (password) => {
     return password.length >= 6;
 };
- 
+
 // Login a User
 const loginUser = ({ email, password }) => {
     return new Promise(async (resolve, reject) => {
@@ -130,72 +130,8 @@ const loginUser = ({ email, password }) => {
     });
 };
 
-// Update a User
-const updateUser = (name, email, password, id) => {
-    return new Promise(async (resolve, reject) => {
-        const allFields = {};
-
-        if (name) {
-            allFields.name = name;
-        }
-        if (email) {
-            allFields.email = email;
-        }
-        if (password) {
-            allFields.password = password;
-        }
-        try {
-            const query = {
-                _id: id,
-            };
-
-            const user = await UserDB.findOne(query).exec();
-            if (!user) {
-                return reject({
-                    code: 404,
-                    messsage: "Contact not found...",
-                });
-            }
-            const response = await UserDB.findOneAndUpdate(
-                id,
-                { $set: allFields },
-                { new: true }
-            );
-            resolve(response);
-        } catch (error) {
-            reject({
-                code: 500,
-                message: error,
-            });
-        }
-    });
-};
-
-// delete a User
-const deleteUser = (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const user = await UserDB.findById(id);
-            if (!user) {
-                return reject({
-                    code: 404,
-                    message: "Account not found...",
-                });
-            }
-            const response = UserDB.findByIdAndRemove(id);
-            resolve(response);
-        } catch (error) {
-            return reject({
-                code: 500,
-                message: error,
-            });
-        }
-    });
-};
 
 module.exports = {
     registerUser,
     loginUser,
-    updateUser,
-    deleteUser,
 };

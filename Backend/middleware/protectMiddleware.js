@@ -2,11 +2,12 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
     // Authorization header
-    const token = req.headers["x-access-token"];
-    
+    const token = req.header("x-access-token");
 
     if (!token) {
-        return res.status(403).send("Token is required for authentication...");
+        return res
+            .status(403)
+            .json({ message: "Token is required for authentication..." });
     }
 
     // if token available
@@ -19,4 +20,6 @@ const verifyToken = (req, res, next) => {
     return next();
 };
 
-module.exports = verifyToken;
+
+
+module.exports = verifyToken
