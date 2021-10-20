@@ -51,6 +51,28 @@ const getProducts = ({ search }) => {
     });
 };
 
+// comments product
+const comments = (name, text, productId, _id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const product = await productDB.findById(productId);
+            const newComments = {
+                user: _id,
+                text: text,
+                name: name,
+            };
+            product.comments.unshift(newComments);
+            await product.save();
+            resolve(product.comments);
+        } catch (error) {
+            reject({
+                code: 500,
+                message: error,
+            });
+        }
+    });
+};
+
 // delete Product
 const deleteProduct = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -77,5 +99,6 @@ const deleteProduct = (id) => {
 module.exports = {
     addProduct,
     getProducts,
+    comments,
     deleteProduct,
 };
