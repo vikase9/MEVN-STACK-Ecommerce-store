@@ -130,8 +130,30 @@ const loginUser = ({ email, password }) => {
     });
 };
 
+// Update User Profile
+const updateUser = (name, email, id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const updatedData = {
+                name,
+                email,
+            };
+
+            const response = await UserDB.findByIdAndUpdate(id, updatedData, {
+                new: true,
+            });
+            resolve(response);
+        } catch (error) {
+            reject({
+                code: 500,
+                message: error,
+            });
+        }
+    });
+};
 
 module.exports = {
     registerUser,
     loginUser,
+    updateUser,
 };
